@@ -1,0 +1,39 @@
+.wrapper {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 100px;
+}
+.pad {
+    max-width: 800px;
+    height: auto;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-gap: 0.2em;
+    border: 1px solid #eee;
+}
+
+.pad>div {
+    background: #dadada;
+    padding: 1em;
+}
+
+.pad>div:nth-child(odd) {
+    background: #a9a7a7;
+}
+
+#game-board .position {
+    width: 50px;
+    height: 50px;
+    z-index: 1;
+    position: relative;
+}
+
+img.ship {
+    z-index: 5;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: auto;
+}
