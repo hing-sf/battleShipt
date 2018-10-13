@@ -30,30 +30,49 @@
     <div id="game-board" class="wrapper">
         <h1 class="title">Welcome to Battle Shipt</h1>
 
-        <div>
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active">
-                    <a href="#one" aria-controls="home" role="tab" data-toggle="tab">Player 1</a>
-                </li>
-                <li role="presentation">
-                    <a href="#two" aria-controls="profile" role="tab" data-toggle="tab">Player 2</a>
-                </li>
-            </ul>
-
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="one">
-                    <section class="player1-pad pad"></section>
-                    <ul class="list-group player-dashboard"></ul>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="two">
-                    <section class="player2-pad pad"></section>
-                    <ul class="list-group player-dashboard"></ul>
+        <!-- select Number of Players -->
+        <div class="jumbotron">
+            <div class="row select-player">
+                <div class="col-xs-12">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary active">
+                            <input type="radio" name="options" id="1player" autocomplete="off" checked> 1 Player
+                        </label>
+                        <label class="btn btn-primary">
+                            <input type="radio" name="options" id="2player" autocomplete="off"> 2 Player
+                        </label>
+                    </div>
+                    <button type="button" id="start-game" data-loading-text="Loading..." class="btn btn-danger"
+                        autocomplete="off">
+                        Start Game
+                    </button>
+                    <div>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#one" aria-controls="home" role="tab" data-toggle="tab">Player 1</a>
+            </li>
+            <li role="presentation">
+                <a href="#two" aria-controls="profile" role="tab" data-toggle="tab">Player 2</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="one">
+                <section class="player1-board board"></section>
+                <ul class="list-group player-dashboard"></ul>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="two">
+                <section class="player2-board board"></section>
+                <ul class="list-group player-dashboard"></ul>
+            </div>
+        </div>
     </div>
     <!-- </main> -->
 

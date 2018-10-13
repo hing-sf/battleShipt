@@ -3,7 +3,7 @@
     margin: 0 auto;
     padding: 100px;
 }
-.pad {
+.board {
     max-width: 800px;
     height: auto;
     margin: 0 auto;
@@ -13,12 +13,12 @@
     border: 1px solid #eee;
 }
 
-.pad>div {
+.board>div {
     background: #dadada;
     padding: 1em;
 }
 
-.pad>div:nth-child(odd) {
+.board>div:nth-child(odd) {
     background: #a9a7a7;
 }
 
