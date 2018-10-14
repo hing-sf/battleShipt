@@ -27,12 +27,12 @@
   <![endif]-->
 
     <!-- <main> -->
-    <div id="game-board" class="wrapper">
+    <div class="wrapper">
         <h1 class="title">Welcome to Battle Shipt</h1>
 
         <!-- select Number of Players -->
-        <div class="jumbotron">
-            <div class="row select-player">
+        <div class="jumbotron select-player">
+            <div class="row">
                 <div class="col-xs-12">
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-primary active">
@@ -52,27 +52,30 @@
             </div>
         </div>
 
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#one" aria-controls="home" role="tab" data-toggle="tab">Player 1</a>
-            </li>
-            <li role="presentation">
-                <a href="#two" aria-controls="profile" role="tab" data-toggle="tab">Player 2</a>
-            </li>
-        </ul>
+        <div id="game-board">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#one" aria-controls="home" role="tab" data-toggle="tab" data-player="player-1">Player 1</a>
+                </li>
+                <li role="presentation">
+                    <a href="#two" aria-controls="profile" role="tab" data-toggle="tab" data-player="player-2">Player 2</a>
+                </li>
+            </ul>
 
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="one">
-                <section class="player1-board board"></section>
-                <ul class="list-group player-dashboard"></ul>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="two">
-                <section class="player2-board board"></section>
-                <ul class="list-group player-dashboard"></ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="one">
+                    <section class="player1-board board"></section>
+                    <ul class="list-group player-dashboard"></ul>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="two">
+                    <section class="player2-board board"></section>
+                    <ul class="list-group player-dashboard"></ul>
+                </div>
             </div>
         </div>
+
     </div>
     <!-- </main> -->
 

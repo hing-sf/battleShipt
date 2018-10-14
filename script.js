@@ -10,26 +10,31 @@
 battleShipt = {
 	init: function () {
 		this.cacheDom();
-		this.buildBoardGame();
+		this.bindEvent();
+		// self.buildBoardGame();
 	},
 	// caching DOM improve performance
 	cacheDom: function () {
-		this.gridContainer = document.querySelector("#game-board");
-		this.dashboard = this.gridContainer.querySelector(".player-dashboard");
-		this.tabs = this.gridContainer.querySelector(".nav-tabs");
-		this.gameOptions = this.gridContainer.querySelector(".select-player");
-		this.startGameBtn = this.gridContainer.querySelector("#start-game");
-		this.playerOneShips = [];
-		this.playerTwoShips = [];
-		this.playerTurn = '';
-		this.numOfPlayer = '';
-		this.gameStarted = false;
+		self = this;
+		self.gridContainer = document.querySelector("#game-board");
+		self.gameOptions = document.querySelector(".select-player");
+		self.startGameBtn = self.gameOptions.querySelector("#start-game");
+		// self.dashboard = self.gridContainer.querySelector(".player-dashboard");
+		self.tabs = self.gridContainer.querySelector(".nav-tabs");
+		self.playerOneShips = [];
+		self.playerTwoShips = [];
+		self.numberOfPosition = 120;
+		self.positionInColumn = 15;
+		self.maxShip = 5;
+		self.playerMove = 'player-1';
+		self.numOfPlayer = '';
+		self.gameStarted = false;
 	},
 	bindEvent: function () {
-		this.gridContainer.addEventListener("click", this.setShip.bind(this));
-		this.tabs.addEventListener("click", this.setPlayer.bind(this));
-		this.gameOptions.addEventListener("click", this.selectGameOptions.bind(this));
-		this.startGameBtn.addEventListener("click", this.startGame.bind(this));
+		self.gridContainer.addEventListener("click", self.setShip);
+		self.tabs.addEventListener("click", self.setPlayer);
+		self.gameOptions.addEventListener("click", self.selectGameOptions);
+		self.startGameBtn.addEventListener("click", self.startGame);
 	},
 	createElement: (el, classLists) => {
 		const element = document.createElement(el)
@@ -39,44 +44,46 @@ battleShipt = {
 		return element;
 	},
 	selectGameOptions: (e) => {
-		this.numOfPlayer = e.target.children[0].id;
-		console.log(this.numOfPlayer);
+		self.numOfPlayer = e.target.children[0].id;
+		console.log(self.numOfPlayer);
 	},
 	startGame: (e) => {
 		e.stopPropagation();
-		console.log(Boolean(this.numOfPlayer))
-		if ( !Boolean(this.numOfPlayer)) {
-			console.log('please select number of player first. ')
+
+		if ( !Boolean(self.numOfPlayer) ) {
+			console.log('please select number of player first.')
 		} else {
-			console.log( 'start game now!! ' )
-			// this.buildBoardGame();
+			self.gameStarted = true;
+			console.log( 'start ready to game!! ' )
+			self.buildBoardGame();
+			self.gameOptions.style.display = 'none';
 		}
 	},
 	buildBoardGame: function () {
-		const numberOfPosition = 120;
-		const positionInColumn = 15;
 		let positionCount = 0;
 		let column = 0;
 		let row = 0;
-		let playerBoard = this.gridContainer.querySelector('.player1-board');
-		// let playerTwoBoard = this.gridContainer.querySelector('.player2-board')
+		let playerOneBoard = self.gridContainer.querySelector('.player1-board');
+		let playerTwoBoard = self.gridContainer.querySelector('.player2-board');
+		let players = [playerOneBoard, playerTwoBoard]
 
-		for (let i = 0; i < numberOfPosition; i++) {
-			positionCount / positionInColumn === row ? row++ : row;
-			column === positionInColumn ? column = 1 : column++;
-			positionCount++;
+		players.forEach(( player ) => {
+			for (let i = 0; i < self.numberOfPosition; i++) {
+				positionCount / self.positionInColumn === row ? row++ : row;
+				column === self.positionInColumn ? column = 1 : column++;
+				positionCount++;
 
-			let placementContainer = this.createElement('div', ['position']);
-			placementContainer.setAttribute("data-coord-number", positionCount );
-			placementContainer.setAttribute("data-coordinate", `${row}, ${column}`);
-			playerBoard.appendChild(placementContainer);
-		}
-		this.bindEvent()
+				let placementContainer = self.createElement('div', ['position']);
+				placementContainer.setAttribute("data-coord-number", positionCount );
+				placementContainer.setAttribute("data-coordinate", `${row}, ${column}`);
+				player.appendChild(placementContainer);
+			}
+		})
+
 	},
 	setPlayer: function (e) {
 		e.preventDefault()
-		battleShipt.playerTurn = e.target.parentElement.innerText;
-		console.log(this.playerTurn)
+		self.playerMove = e.target.getAttribute('data-player');
 	},
 	matchCoordinate: (arr, value) => {
 		return arr.some(function (item) {
@@ -88,32 +95,33 @@ battleShipt = {
 		return coordinate;
 	},
 	setShip: (e) => {
-		const maxShip = 8;
-		let shipList = battleShipt.playerOneShips;
-		let coordinate = battleShipt.getCoordinate(e);
+		let dashboard = e.target.parentElement.nextElementSibling;
+		let shipList = self.playerMove === 'player-1' ? self.playerOneShips : self.playerTwoShips;
+		let coordinate = self.getCoordinate(e);
 		let setCoordinate = e.target;
 		let shipsLen = shipList.length;
-		let duplicate = battleShipt.matchCoordinate(shipList, coordinate);
+		let duplicate = self.matchCoordinate(shipList, coordinate);
 
-		if (shipsLen >= maxShip) {
-			return console.log('reach max ship = ' + maxShip)
+		if (shipsLen >= self.maxShip) {
+			return console.log('reach max ship = ' + self.maxShip)
 		}
 		if (coordinate === null) {
 			return
 		}
-		if (shipsLen === 0 || !duplicate) {
+		// if (shipsLen === 0 || !duplicate) {
+		if ( !duplicate ) {
 			// add ship icon to board
-			let setShip = battleShipt.createElement('img', ['ship']);
+			let setShip = self.createElement('img', ['ship']);
 			setShip.setAttribute('src', './img/battleship.png');
 			setShip.setAttribute('alt', 'battleship icon');
 
 			// add coordinate to list
-			let shipCoord = battleShipt.createElement('li', ['list-group-item']);
+			let shipCoord = self.createElement('li', ['list-group-item']);
 			shipCoord.innerText = `Ship ${shipsLen + 1} : row, column ${coordinate}`;
 
 			// add elements to dom
 			setCoordinate.appendChild(setShip);
-			battleShipt.dashboard.appendChild(shipCoord);
+			dashboard.appendChild(shipCoord);
 
 			// push ship coordinate to Player List
 			shipList.push(coordinate)
@@ -122,10 +130,10 @@ battleShipt = {
 		}
 	},
 	randomCoordinate: () => {
-
+		return Math.floor(( Math.random() * self.numberOfPosition ) + 1);
 	},
 	fireMissile: () => {
-		let currentPlaer = this.playerTurn;
+		let currentPlaer = self.playerMove;
 
 	},
 	sinkShip: (coord) => {
