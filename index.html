@@ -46,33 +46,36 @@
                         autocomplete="off">
                         Start Game
                     </button>
-                    <div>
-                    </div>
+
                 </div>
             </div>
         </div>
 
-        <div id="game-board">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active">
-                    <a href="#one" aria-controls="home" role="tab" data-toggle="tab" data-player="player-1">Player 1</a>
-                </li>
-                <li role="presentation">
-                    <a href="#two" aria-controls="profile" role="tab" data-toggle="tab" data-player="player-2">Player 2</a>
-                </li>
-            </ul>
 
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="one">
-                    <section class="player1-board board"></section>
-                    <ul class="list-group player-dashboard"></ul>
+        <div id="game-board">
+            <div class="row toggle-player-container">
+                <div class="col-xs-12">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default active">
+                            <input type="radio" name="options" data-player="player-1" class="select-player-1" autocomplete="off" checked> 1 Player
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="options" data-player="player-2" class="select-player-2" autocomplete="off"> 2 Player
+                        </label>
+                    </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="two">
-                    <section class="player2-board board"></section>
-                    <ul class="list-group player-dashboard"></ul>
-                </div>
+            </div>
+
+            <!-- Player boards -->
+            <div class="players-board">
+                <!-- <div role="tabpanel" class="tab-pane active" id="one"> -->
+                <section class="player1-board board"></section>
+                <ul class="list-group player-dashboard"></ul>
+                <!-- </div>
+                <div role="tabpanel" class="tab-pane" id="two"> -->
+                <section class="player2-board board"></section>
+                <ul class="list-group player-dashboard"></ul>
+                <!-- </div> -->
             </div>
         </div>
 
