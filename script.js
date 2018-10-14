@@ -1,17 +1,13 @@
 // TODO
-// choose 1 or 2 player
-// start game
 // winner logic
 // shoot missle, sink ship
 // player turns
-// cpu random placement
 // cpu ramdom fire
 
 battleShipt = {
 	init: function () {
 		this.cacheDom();
 		this.bindEvent();
-		// self.buildBoardGame();
 	},
 	// caching DOM improve performance
 	cacheDom: function () {
@@ -55,8 +51,7 @@ battleShipt = {
 		if (!Boolean(self.numOfPlayer)) {
 			console.log('please select number of player first.')
 		} else {
-			self.gameStarted = true;
-			console.log('start ready to game!! ')
+			console.log('get ready to battle!!')
 			self.buildBoardGame();
 			self.gameOptions.style.display = 'none';
 		}
@@ -66,26 +61,27 @@ battleShipt = {
 		let column = 0;
 		let row = 0;
 
-
 		[self.player1Board, self.player2Board].forEach((player) => {
-			for (let i = 0; i < self.numberOfPosition; i++) {
+			for (let i = 0; i < self.numberOfPosition * 2; i++) {
 				positionCount / self.positionInColumn === row ? row++ : row;
 				column === self.positionInColumn ? column = 1 : column++;
+				let playerClass = positionCount <= self.numberOfPosition ? ['position', 'player-2'] : ['position', 'player-1'];
 				positionCount++;
 
-				let placementContainer = self.createElement('div', ['position']);
+				let placementContainer = self.createElement('div', playerClass);
 				placementContainer.setAttribute("data-coord-number", positionCount);
 				placementContainer.setAttribute("data-coordinate", `${row}, ${column}`);
 				player.appendChild(placementContainer);
 			}
 			positionCount = 0;
+			column = 0;
+			row = 0;
 		})
 
 		// set CPU ships
 		if (self.numOfPlayer === '1player') {
-			while (self.playerTwoShips.length < self.maxShip ) {
-				self.playerMove = 'player-2'
-				console.log(self.playerTwoShips.length);
+			while (self.playerTwoShips.length < self.maxShip) {
+				self.playerMove = 'player-2';
 				let position = self.player2Board.querySelectorAll(`[data-coord-number="${ self.randomCoordinate() }"]`)[0];
 				let getRandomCoord = position.getAttribute('data-coordinate');
 				self.setShip(null, position, getRandomCoord)
@@ -100,7 +96,7 @@ battleShipt = {
 	},
 	matchCoordinate: (arr, value) => {
 		return arr.some(function (item) {
-			return value === item;
+				return value === item
 		});
 	},
 	getCoordinate: (e) => {
@@ -108,20 +104,29 @@ battleShipt = {
 		return coordinate;
 	},
 	setShip: (e, cpuPosition, cpuCoord) => {
+		if( self.gameStarted === true ) { self.fireMissile(e); return }
 		let dashboard = cpuCoord ? self.player2Board.nextElementSibling : e.target.parentElement.nextElementSibling;
-		let shipList = self.playerMove === 'player-1' ?  self.playerOneShips : self.playerTwoShips;
+		let shipList = self.playerMove === 'player-1' ? self.playerOneShips : self.playerTwoShips;
 		let coordinate = cpuCoord || self.getCoordinate(e);
 		let coordinateContainer = cpuPosition || e.target;
 		let shipsLen = shipList.length;
 		let duplicate = self.matchCoordinate(shipList, coordinate);
+		let coordNumber = coordinateContainer.getAttribute('data-coord-number');
+
+		if (self.playerMove === 'player-1' && coordNumber <= self.numberOfPosition) {
+			return console.log('your setting ship in enemy territory');
+		}
 
 		if (shipsLen >= self.maxShip) {
 			return console.log('reach max ship = ' + self.maxShip)
 		}
+
+		// clicked on empty space
 		if (coordinate === null) {
 			return
 		}
-		// if (shipsLen === 0 || !duplicate) {
+
+		// set ship if not duplicate
 		if (!duplicate) {
 			// add ship icon to board
 			let setShip = self.createElement('img', ['ship']);
@@ -130,7 +135,7 @@ battleShipt = {
 
 			// add coordinate to list
 			let shipCoord = self.createElement('li', ['list-group-item']);
-			shipCoord.innerText = `Ship ${shipsLen + 1} : row, column ${coordinate}`;
+			shipCoord.innerText = `Ship ${shipsLen + 1} | Coordinate Number ${coordNumber} | row, column ${coordinate}`;
 
 			// add elements to dom
 			coordinateContainer.appendChild(setShip);
@@ -138,6 +143,13 @@ battleShipt = {
 
 			// push ship coordinate to Player List
 			shipList.push(coordinate)
+
+			// update game status to start if both player are set
+			if( self.playerOneShips.length + self.playerTwoShips.length === self.maxShip * 2 ) {
+				self.gameStarted = true;
+				console.log(self.gameStarted);
+			}
+
 		} else {
 			console.log('select another position');
 		}
@@ -145,19 +157,45 @@ battleShipt = {
 	randomCoordinate: () => {
 		return Math.floor((Math.random() * self.numberOfPosition) + 1);
 	},
-	fireMissile: () => {
-		let currentPlaer = self.playerMove;
+	fireMissile: (e) => {
+		let currentPlayer = self.playerMove;
+		let coordinate = self.getCoordinate(e);
+		let enemyShipsList = currentPlayer === 'player-1' ? self.playerTwoShips : self.playerOneShips;
+		let targetHit = self.matchCoordinate( enemyShipsList, coordinate );
 
+		if ( targetHit ) {
+			self.sinkShip( targetHit, coordinate, enemyShipsList )
+		} else {
+			let target = self.gridContainer.querySelector(`[data-coordinate="${ coordinate }"]`);
+
+			// add ship icon to board
+			let missedTarget = self.createElement('img', ['missed',currentPlayer+"_icon"]);
+			missedTarget.setAttribute('src', './img/boom.png');
+			missedTarget.setAttribute('alt', 'boom icon');
+
+			target.append(missedTarget)
+			console.log(target);
+			console.log(missedTarget);
+			// Array.from(targets).forEach(target => {
+			// 	console.log(target.parentElement);
+			// });
+			// console.log( self.gridContainer.querySelectorAll(`[data-coordinate="${ coordinate }"]`)[0].parentElement )
+			console.log('MISSED TARGET')
+		}
 	},
-	sinkShip: (coord) => {
+	sinkShip: ( coord, shipList ) => {
+
+		console.log('sinking ship', coord, shipList)
+
+
 		// const itemContainer = e.target.parentElement.parentElement;
 		// const itemParent = itemContainer.parentElement;
 		// itemContainer.style.transform = "scale(0)";
 
 		// remove element after animation
-		itemContainer.addEventListener("transitionend", (e) => {
-			itemParent.removeChild(itemContainer);
-		}, false);
+		// itemContainer.addEventListener("transitionend", (e) => {
+		// 	itemParent.removeChild(itemContainer);
+		// }, false);
 	},
 	winner: () => {
 
