@@ -12,11 +12,11 @@ battleShipt = {
 	// caching DOM improve performance
 	cacheDom: function () {
 		self = this;
-		self.gridContainer = document.querySelector(".players-board");
+		self.playerBoard = document.querySelector(".players-board");
 		self.gameOptions = document.querySelector(".select-player");
 		self.startGameBtn = self.gameOptions.querySelector("#start-game");
-		self.player1Board = self.gridContainer.querySelector('.player1-board');
-		self.player2Board = self.gridContainer.querySelector('.player2-board');
+		self.player1Board = self.playerBoard.querySelector('.player1-board');
+		self.player2Board = self.playerBoard.querySelector('.player2-board');
 		self.togglePlayer = document.querySelector(".toggle-player-container");
 		self.playerOneShips = [];
 		self.playerTwoShips = [];
@@ -28,7 +28,7 @@ battleShipt = {
 		self.gameStarted = false;
 	},
 	bindEvent: function () {
-		self.gridContainer.addEventListener("click", self.setShip);
+		self.playerBoard.addEventListener("click", self.setShip);
 		self.togglePlayer.addEventListener("click", self.setPlayer);
 		self.gameOptions.addEventListener("click", self.selectGameOptions);
 		self.startGameBtn.addEventListener("click", self.startGame);
@@ -145,7 +145,7 @@ battleShipt = {
 		// set ship if not duplicate
 		if (!duplicate) {
 			// add ship icon to board
-			let setShip = self.createElement('img', ['ship', self.playerMove]);
+			let setShip = self.createElement('img', ['icon','ship', self.playerMove]);
 			setShip.setAttribute('src', './img/battleship.png');
 			setShip.setAttribute('alt', 'battleship icon');
 
@@ -174,42 +174,33 @@ battleShipt = {
 		return Math.floor((Math.random() * self.numberOfPosition) + 1);
 	},
 	fireMissile: (e) => {
+		// e.stopPropagation()
 		let currentPlayer = self.playerMove;
 		let coordinate = self.getCoordinate(e);
 		let enemyShipsList = currentPlayer === 'player-1' ? self.playerTwoShips : self.playerOneShips;
-		let targetHit = self.matchCoordinate(enemyShipsList, coordinate);
+		let fireMissle = self.matchCoordinate(enemyShipsList, coordinate);
+		let targetCoord = self.playerBoard.querySelector(`[data-coordinate="${ coordinate }"]`);
 
-		if (targetHit) {
-			self.sinkShip(targetHit, coordinate, enemyShipsList)
-		} else {
-			let target = self.gridContainer.querySelector(`[data-coordinate="${ coordinate }"]`);
+		if ( fireMissle ) {
+			// target Hit, add sink ship icon and
+			let targetHit = self.createElement('img', ['icon','target-hit',`${currentPlayer}_icon`]);
+			targetHit.setAttribute('src', './img/sinkingship.png');
+			targetHit.setAttribute('alt', 'Sinking ship icon');
+			targetCoord.append(targetHit)
 
-			// add ship icon to board
-			let missedTarget = self.createElement('img', ['missed', currentPlayer + "_icon"]);
+			// remove ship from board
+			targetCoord.querySelector('.ship').remove()
+		}
+		else if( e.target.tagName === 'IMG' ) {
+			console.log('already fired')
+		}
+		else {
+			// Missed target, add boom icon to board
+			let missedTarget = self.createElement('img', ['icon','missed', currentPlayer + "_icon"]);
 			missedTarget.setAttribute('src', './img/boom.png');
 			missedTarget.setAttribute('alt', 'boom icon');
-
-			// target.append(missedTarget)
-			console.log(target);
-			console.log(missedTarget);
-
-			// console.log( self.gridContainer.querySelectorAll(`[data-coordinate="${ coordinate }"]`)[0].parentElement )
-			console.log('MISSED TARGET')
+			targetCoord.append(missedTarget)
 		}
-	},
-	sinkShip: (coord, shipList) => {
-
-		console.log('sinking ship', coord, shipList)
-
-
-		// const itemContainer = e.target.parentElement.parentElement;
-		// const itemParent = itemContainer.parentElement;
-		// itemContainer.style.transform = "scale(0)";
-
-		// remove element after animation
-		// itemContainer.addEventListener("transitionend", (e) => {
-		// 	itemParent.removeChild(itemContainer);
-		// }, false);
 	},
 	winner: () => {
 

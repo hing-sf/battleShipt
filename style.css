@@ -36,7 +36,7 @@
     border: 1px solid red;
 }
 
-img.ship {
+/* img.ship {
     z-index: 5;
     width: 100%;
     position: absolute;
@@ -50,6 +50,14 @@ img.missed {
     top: 20%;
     left: 0;
     width: 100%;
+} */
+
+img.icon {
+    z-index: 5;
+    width: 85%;
+    position: absolute;
+    top: 10%;
+    left: 10%;
 }
 .player-1 {
     /* background: rgba(247, 153, 153, .3); */
