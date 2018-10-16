@@ -66,9 +66,8 @@ battleShipt = {
 			placementContainer.setAttribute("data-coordinate", `${row}, ${column}`);
 			self.player1Board.appendChild(placementContainer);
 		}
-		positionCount = 0;
-		column = 0;
-		row = 0;
+		// reset positions
+		positionCount = 0, column = 0, row = 0;
 
 		// if 1 player selecteted, set CPU ships
 		if (self.numOfPlayer === '1player') {
@@ -103,19 +102,6 @@ battleShipt = {
 				item.classList.contains(hidePlayer) ? item.style.display = 'none' : item.style.display = 'block';
 			});
 		}
-	},
-	matchCoordinateObj: (value, obj) => {
-		for (let key in obj) {
-			if (obj.hasOwnProperty(key)) {
-				if (obj[key].coordinate === value) {
-					return key;
-				}
-			}
-		}
-		return false;
-	},
-	getCoordinate: (e) => {
-		return e.target.getAttribute('data-coordinate');
 	},
 	setShip: (e, cpuTarget, cpuCoord) => {
 
@@ -181,6 +167,19 @@ battleShipt = {
 		// return player Ship Length
 		return Object.keys(self.playersShipsObject[ el ]).length;
 	},
+	matchCoordinateObj: (value, obj) => {
+		for (let key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				if (obj[key].coordinate === value) {
+					return key;
+				}
+			}
+		}
+		return false;
+	},
+	getCoordinate: (e) => {
+		return e.target.getAttribute('data-coordinate');
+	},
 	randomNumber: () => {
 		// return random number
 		return Math.floor((Math.random() * self.numOfPlayerPositions) + 1);
@@ -192,7 +191,7 @@ battleShipt = {
 		// check if random number match player 2 CPU ships Coordinate
 		let friendlyFire = self.matchCoordinateObj(random, self.playersShipsObject['player-2'])
 		// if not friendFire, trigger fireMissle
-		friendlyFire ? self.randomNumber() : self.fireMissile(null, random)
+		friendlyFire ? self.randomNumber() : self.fireMissile(null, self.playerBoard.querySelector(`[data-coord-number="${random}"]`).getAttribute(['data-coordinate']))
 	},
 	fireMissile: (e, coord) => {
 		let opponent = self.current === 'player-1' ? 'player-2' : 'player-1';
@@ -204,7 +203,6 @@ battleShipt = {
 		// Target Hit!!
 		if (hitTarget) {
 			opponentObject[hitTarget].hits >= self.hitToSink - 1 ? self.sinkShip(targetCoord, self.current, opponentObject, hitTarget) : opponentObject[hitTarget].hits++;
-
 			console.log(`Hit ${opponentObject[hitTarget].hits} of ${self.hitToSink}`);
 		} else if (e !== null && e.target.tagName === 'IMG') {
 			console.log('ALREADY TAKEN')
@@ -216,7 +214,7 @@ battleShipt = {
 			targetCoord.append(missedTarget)
 			console.log('MISSED');
 		}
-		document.querySelector('.player-action').innerText = `${opponent} Move, toggle ${opponent}`;
+		document.querySelector('.player-action').innerText = `${opponent} Move, toggle to ${opponent}`;
 	},
 	sinkShip: (targetCoord, currentPlayer, opponentObject, hit) => {
 
