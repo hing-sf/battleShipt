@@ -1,19 +1,18 @@
 .wrapper {
-    width: 1000px;
+    width: 750px;
     margin: 0 auto;
-    padding: 20px 100px;
 }
+
 .wrapper .jumbotron {
     text-align: center;
 }
+
 .board {
-    width: 750px;
+    width: 100%;
     height: auto;
-    margin: 0 auto;
+    margin: 0px auto;
     display: grid;
     grid-template-columns: repeat(15, 1fr);
-    /* grid-gap: 0.2em; */
-    padding: 20px 0;
 }
 
 .board>div {
@@ -28,37 +27,40 @@
 #game-board .position {
     width: 50px;
     height: 50px;
-    z-index: 1;
+    /* z-index: 1; */
     position: relative;
     border: 1px solid #eee;
 }
+
 #game-board .position:hover {
     border: 1px solid red;
 }
 
-/* img.ship {
-    z-index: 5;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: auto;
+img.ship {
+    top: 30%;
+    left: 10%;
 }
 
-img.missed {
-    position: absolute;
-    top: 20%;
-    left: 0;
-    width: 100%;
-} */
-
-img.icon {
-    z-index: 5;
-    width: 85%;
-    position: absolute;
+img.target-hit {
     top: 10%;
     left: 10%;
 }
-.player-1 {
-    /* background: rgba(247, 153, 153, .3); */
+
+.icon {
+    width: 85%;
+    z-index: 5;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+}
+
+button {
+    width: 150px;
+}
+
+.winner {
+    text-align: center;
+    border: red solid 1px;
+    padding: 5px;
+    display: none;
 }

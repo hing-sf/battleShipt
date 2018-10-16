@@ -29,10 +29,11 @@
     <!-- <main> -->
     <div class="wrapper">
         <h1 class="title">Welcome to Battle Shipt</h1>
+        <h2 class="winner"></h2>
 
         <!-- select Number of Players -->
-        <div class="jumbotron select-player">
-            <div class="row">
+        <div class="jumbotron ">
+            <div class="row select-player">
                 <div class="col-xs-12">
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-primary active">
@@ -49,33 +50,32 @@
 
                 </div>
             </div>
+            <div class="row player-select hidden">
+                <div class="col-xs-12">
+                    <div class="toggle-player-container btn-group" data-toggle="buttons">
+                        <label class="btn btn-default active">
+                            <input type="radio" name="options" data-player="player-1" class="select-player-1"
+                                autocomplete="off" checked> 1 Player
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="options" data-player="player-2" class="select-player-2"
+                                autocomplete="off"> 2 Player
+                        </label>
+                    </div>
+                    <button type="button" class="random-fire btn btn-danger">CPU random fire</button>
+                </div>
+            </div>
+            <h2 class="player-action"></h2>
         </div>
 
 
         <div id="game-board">
-            <div class="row toggle-player-container">
-                <div class="col-xs-12">
-                    <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-default active">
-                            <input type="radio" name="options" data-player="player-1" class="select-player-1" autocomplete="off" checked> 1 Player
-                        </label>
-                        <label class="btn btn-default">
-                            <input type="radio" name="options" data-player="player-2" class="select-player-2" autocomplete="off"> 2 Player
-                        </label>
-                    </div>
-                </div>
-            </div>
-
             <!-- Player boards -->
             <div class="players-board">
-                <!-- <div role="tabpanel" class="tab-pane active" id="one"> -->
-                <section class="player1-board board"></section>
+                <section class="player-1-board board"></section>
                 <ul class="list-group player-dashboard player-1"></ul>
-                <!-- </div>
-                <div role="tabpanel" class="tab-pane" id="two"> -->
-                <section class="player2-board board"></section>
+                <section class="player-2-board board"></section>
                 <ul class="list-group player-dashboard player-2"></ul>
-                <!-- </div> -->
             </div>
         </div>
 
