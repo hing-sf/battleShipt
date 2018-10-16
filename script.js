@@ -119,7 +119,10 @@ battleShipt = {
 
 		// if game started, click event will trigger fireMissle()
 		if (self.gameStarted === true) { return self.fireMissile(e) }
-
+		// check if Player
+		if( playerOne && coordNumber <= self.numOfPlayerPositions ) {
+			return console.log(`select coordinate withing 1 - ${self.numOfPlayerPositions}`)
+		}
 		if( playerOne && coordNumber <= self.numOfPlayerPositions ) {
 			return console.log(`select coordinate withing 1 - ${self.numOfPlayerPositions}`)
 		}
@@ -132,12 +135,12 @@ battleShipt = {
 		if (!duplicate) {
 			// add ship icon to game board
 			let setShip = self.createElement('img', ['icon', 'ship', self.current]);
-			setShip.setAttribute('src', './img/battleship.png');
-			setShip.setAttribute('alt', 'battleship icon');
+				setShip.setAttribute('src', './img/battleship.png');
+				setShip.setAttribute('alt', 'battleship icon');
 
 			// add coordinate to list
 			let shipCoord = self.createElement('li', ['list-group-item', `ship_${shipsLen + 1}`]);
-			shipCoord.innerText = `Ship ${shipsLen + 1} | Coordinate Number ${coordNumber} | row, column ${coordinate}`;
+				shipCoord.innerText = `Ship ${shipsLen + 1} | Coordinate Number ${coordNumber} | row, column ${coordinate}`;
 
 			// add elements to dom
 			coordinateContainer.appendChild(setShip);
@@ -209,10 +212,10 @@ battleShipt = {
 		} else {
 			// Missed target, add boom icon to board
 			let missedTarget = self.createElement('img', ['icon', 'missed', `${self.current}_icon`]);
-			missedTarget.setAttribute('src', './img/boom.png');
-			missedTarget.setAttribute('alt', 'boom icon');
-			targetCoord.append(missedTarget)
-			console.log('MISSED');
+				missedTarget.setAttribute('src', './img/boom.png');
+				missedTarget.setAttribute('alt', 'boom icon');
+				targetCoord.append(missedTarget)
+				console.log('MISSED');
 		}
 		document.querySelector('.player-action').innerText = `${opponent} Move, toggle to ${opponent}`;
 	},
@@ -220,9 +223,9 @@ battleShipt = {
 
 		// target Hit, add sink ship icon and
 		let addSinkIcon = self.createElement('img', ['icon', 'target-hit', `${currentPlayer}_icon`]);
-		addSinkIcon.setAttribute('src', './img/sinkingship.png');
-		addSinkIcon.setAttribute('alt', 'Sinking ship icon');
-		targetCoord.append(addSinkIcon)
+			addSinkIcon.setAttribute('src', './img/sinkingship.png');
+			addSinkIcon.setAttribute('alt', 'Sinking ship icon');
+			targetCoord.append(addSinkIcon)
 
 		// remove ship from board
 		targetCoord.querySelector('.ship').remove()
@@ -245,9 +248,9 @@ battleShipt = {
 		}
 		if (count === self.maxShip) {
 			let winner = document.querySelector('.winner');
-			winner.innerText = `${currentPlayer} WIN!!`;
-			winner.style.display = 'block';
-			return
+				winner.innerText = `${currentPlayer} WIN!!`;
+				winner.style.display = 'block';
+				return
 		}
 	}
 };
